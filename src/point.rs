@@ -1,4 +1,5 @@
 use std::ops::Add;
+use std::ops::Sub;
 
 const FLOAT_MARGIN: f32 = 0.0000001;
 
@@ -58,6 +59,19 @@ impl Add for Tuple {
             y: self.y + other.y,
             z: self.z + other.z,
             w: self.w + other.w,
+        }
+    }
+}
+
+impl Sub for Tuple {
+    type Output = Tuple;
+
+    fn sub(self, other: Tuple) -> Tuple {
+        Tuple {
+            x: self.x - other.x,
+            y: self.y - other.y,
+            z: self.z - other.z,
+            w: self.w - other.w,
         }
     }
 }
@@ -143,4 +157,25 @@ mod tests {
 
         assert_eq!((a1 + a2).is_equal(result), true);
     }
+
+    #[test]
+    fn subtracting_two_points() {
+        let a1 = Tuple::point(3., 2., 1.);
+        let a2 = Tuple::point(5., 6., 7.);
+
+        let result = Tuple::vector(-2., -4., -6.);
+
+        assert_eq!((a1 - a2).is_equal(result), true);
+    }
+
+    #[test]
+    fn subtracting_vector_from_a_point() {
+        let a1 = Tuple::point(3., 2., 1.);
+        let a2 = Tuple::vector(5., 6., 7.);
+
+        let result = Tuple::point(-2., -4., -6.);
+
+        assert_eq!((a1 - a2).is_equal(result), true);
+    }
+
 }
