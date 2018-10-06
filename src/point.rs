@@ -64,6 +64,17 @@ impl Tuple {
     pub fn magnitude(&self) -> f32 {
         (self.x * self.x + self.y * self.y + self.z * self.z + self.w * self.w).sqrt()
     }
+
+    pub fn normalize(&self) -> Tuple {
+        let mag = self.magnitude();
+
+        Tuple {
+            x: self.x / mag,
+            y: self.y / mag,
+            z: self.z / mag,
+            w: self.w / mag,
+        }
+    }
 }
 
 impl Add for Tuple {
@@ -280,5 +291,17 @@ mod tests {
         let m1: f32 = 14.;
         assert_eq!(Tuple::vector(1., 2., 3.).magnitude(), m1.sqrt());
         assert_eq!(Tuple::vector(-1., -2., -3.).magnitude(), m1.sqrt());
+    }
+
+    #[test]
+    fn normalizing_vector() {
+        let a1 = Tuple::vector(4., 0., 0.);
+
+        let result = Tuple::vector(1., 0., 0.);
+
+        assert_eq!(a1.normalize().is_equal(result), true);
+
+        let a2 = Tuple::vector(1., 2., 3.);
+        assert_eq!(float_eq(a2.normalize().magnitude(), 1.), true);
     }
 }
