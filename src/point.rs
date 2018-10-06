@@ -75,6 +75,10 @@ impl Tuple {
             w: self.w / mag,
         }
     }
+
+    pub fn dot(&self, other: Tuple) -> f32 {
+        self.x * other.x + self.y * other.y + self.z * other.z + self.w * other.w
+    }
 }
 
 impl Add for Tuple {
@@ -303,5 +307,13 @@ mod tests {
 
         let a2 = Tuple::vector(1., 2., 3.);
         assert_eq!(float_eq(a2.normalize().magnitude(), 1.), true);
+    }
+
+    #[test]
+    fn dot_product() {
+        let a1 = Tuple::vector(1., 2., 3.);
+        let a2 = Tuple::vector(2., 3., 4.);
+
+        assert_eq!(float_eq(a1.dot(a2), 20.), true);
     }
 }
