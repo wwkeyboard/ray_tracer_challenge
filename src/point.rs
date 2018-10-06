@@ -1,4 +1,5 @@
 use std::ops::Add;
+use std::ops::Div;
 use std::ops::Mul;
 use std::ops::Sub;
 
@@ -96,6 +97,19 @@ impl Mul<f32> for Tuple {
             y: self.y * mult,
             z: self.z * mult,
             w: self.w * mult,
+        }
+    }
+}
+
+impl Div<f32> for Tuple {
+    type Output = Tuple;
+
+    fn div(self, d: f32) -> Tuple {
+        Tuple {
+            x: self.x / d,
+            y: self.y / d,
+            z: self.z / d,
+            w: self.w / d,
         }
     }
 }
@@ -239,4 +253,14 @@ mod tests {
 
         assert_eq!((a1 * 3.5).is_equal(result), true);
     }
+
+    #[test]
+    fn divide_tuple_by_scalar() {
+        let a1 = Tuple::vector(1., -2., 3.);
+
+        let result = Tuple::vector(0.5, -1., 1.5);
+
+        assert_eq!((a1 / 2.).is_equal(result), true);
+    }
+
 }
