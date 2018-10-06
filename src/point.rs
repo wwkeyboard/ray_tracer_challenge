@@ -1,7 +1,14 @@
 use std::ops::Add;
+use std::ops::Mul;
 use std::ops::Sub;
 
 const FLOAT_MARGIN: f32 = 0.0000001;
+const ZERO_VECTOR: Tuple = Tuple {
+    x: 0.,
+    y: 0.,
+    z: 0.,
+    w: 0.,
+};
 
 fn float_eq(a: f32, b: f32) -> bool {
     (a - b).abs() < FLOAT_MARGIN
@@ -48,6 +55,10 @@ impl Tuple {
             w: 0.0,
         }
     }
+
+    pub fn negate(self) -> Tuple {
+        ZERO_VECTOR - self
+    }
 }
 
 impl Add for Tuple {
@@ -72,6 +83,19 @@ impl Sub for Tuple {
             y: self.y - other.y,
             z: self.z - other.z,
             w: self.w - other.w,
+        }
+    }
+}
+
+impl Mul<f32> for Tuple {
+    type Output = Tuple;
+
+    fn mul(self, mult: f32) -> Tuple {
+        Tuple {
+            x: self.x * mult,
+            y: self.y * mult,
+            z: self.z * mult,
+            w: self.w * mult,
         }
     }
 }
@@ -178,4 +202,41 @@ mod tests {
         assert_eq!((a1 - a2).is_equal(result), true);
     }
 
+    #[test]
+    fn subtracting_two_vectors() {
+        let a1 = Tuple::vector(3., 2., 1.);
+        let a2 = Tuple::vector(5., 6., 7.);
+
+        let result = Tuple::vector(-2., -4., -6.);
+
+        assert_eq!((a1 - a2).is_equal(result), true);
+    }
+
+    #[test]
+    fn subtract_vector_from_zero_vector() {
+        let zero = Tuple::vector(0., 0., 0.);
+        let a1 = Tuple::vector(1., -2., 3.);
+
+        let result = Tuple::vector(-1., 2., -3.);
+
+        assert_eq!((zero - a1).is_equal(result), true);
+    }
+
+    #[test]
+    fn negate_a_vector() {
+        let a1 = Tuple::vector(1., -2., 3.);
+
+        let result = Tuple::vector(-1., 2., -3.);
+
+        assert_eq!(a1.negate().is_equal(result), true);
+    }
+
+    #[test]
+    fn multiple_tuple_by_scalar() {
+        let a1 = Tuple::vector(1., -2., 3.);
+
+        let result = Tuple::vector(3.5, -7., 10.5);
+
+        assert_eq!((a1 * 3.5).is_equal(result), true);
+    }
 }
