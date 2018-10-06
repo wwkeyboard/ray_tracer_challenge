@@ -1,3 +1,9 @@
+const FLOAT_MARGIN: f32 = 0.0000001;
+
+fn float_eq(a: f32, b: f32) -> bool {
+    (a - b).abs() < FLOAT_MARGIN
+}
+
 #[derive(Debug)]
 pub struct Tuple {
     x: f32,
@@ -16,7 +22,10 @@ impl Tuple {
     }
 
     pub fn is_equal(&self, t: Tuple) -> bool {
-        (self.x == t.x) && (self.y == t.y) && (self.z == t.z) && (self.w == t.w)
+        float_eq(self.x, t.x)
+            && float_eq(self.y, t.y)
+            && float_eq(self.z, t.z)
+            && float_eq(self.w, t.w)
     }
 
     pub fn point(x: f32, y: f32, z: f32) -> Tuple {
