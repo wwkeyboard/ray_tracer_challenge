@@ -57,7 +57,7 @@ impl Add for Tuple {
             x: self.x + other.x,
             y: self.y + other.y,
             z: self.z + other.z,
-            w: 1.0,
+            w: self.w + other.w,
         }
     }
 }
@@ -130,6 +130,16 @@ mod tests {
         let a2 = Tuple::vector(-2., 3., 1.);
 
         let result = Tuple::point(1., 1., 6.);
+
+        assert_eq!((a1 + a2).is_equal(result), true);
+    }
+
+    #[test]
+    fn adding_two_vectors_gives_a_vector() {
+        let a1 = Tuple::vector(3., -2., 5.);
+        let a2 = Tuple::vector(-2., 3., 1.);
+
+        let result = Tuple::vector(1., 1., 6.);
 
         assert_eq!((a1 + a2).is_equal(result), true);
     }
