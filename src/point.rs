@@ -79,6 +79,14 @@ impl Tuple {
     pub fn dot(&self, other: Tuple) -> f32 {
         self.x * other.x + self.y * other.y + self.z * other.z + self.w * other.w
     }
+
+    pub fn cross(&self, other: Tuple) -> Tuple {
+        let x = self.y * other.z - self.z * other.y;
+        let y = self.z * other.x - self.x * other.z;
+        let z = self.x * other.y - self.y * other.x;
+
+        Tuple::vector(x, y, z)
+    }
 }
 
 impl Add for Tuple {
@@ -315,5 +323,14 @@ mod tests {
         let a2 = Tuple::vector(2., 3., 4.);
 
         assert_eq!(float_eq(a1.dot(a2), 20.), true);
+    }
+
+    #[test]
+    fn cross_product() {
+        let a1 = Tuple::vector(1., 2., 3.);
+        let a2 = Tuple::vector(2., 3., 4.);
+
+        let result1 = Tuple::vector(-1., 2., -1.);
+        assert_eq!(a1.cross(a2).is_equal(result1), true);
     }
 }
