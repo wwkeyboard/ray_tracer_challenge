@@ -60,6 +60,10 @@ impl Tuple {
     pub fn negate(self) -> Tuple {
         ZERO_VECTOR - self
     }
+
+    pub fn magnitude(&self) -> f32 {
+        (self.x * self.x + self.y * self.y + self.z * self.z + self.w * self.w).sqrt()
+    }
 }
 
 impl Add for Tuple {
@@ -263,4 +267,18 @@ mod tests {
         assert_eq!((a1 / 2.).is_equal(result), true);
     }
 
+    #[test]
+    fn magnitude_of_vectors() {
+        let a1 = Tuple::vector(1., 0., 0.);
+        let a2 = Tuple::vector(0., 1., 0.);
+        let a3 = Tuple::vector(0., 0., 1.);
+
+        assert_eq!(a1.magnitude(), 1.);
+        assert_eq!(a2.magnitude(), 1.);
+        assert_eq!(a3.magnitude(), 1.);
+
+        let m1: f32 = 14.;
+        assert_eq!(Tuple::vector(1., 2., 3.).magnitude(), m1.sqrt());
+        assert_eq!(Tuple::vector(-1., -2., -3.).magnitude(), m1.sqrt());
+    }
 }
