@@ -15,12 +15,12 @@ fn float_eq(a: f32, b: f32) -> bool {
     (a - b).abs() < FLOAT_MARGIN
 }
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct Tuple {
-    x: f32,
-    y: f32,
-    z: f32,
-    w: f32,
+    pub x: f32,
+    pub y: f32,
+    pub z: f32,
+    pub w: f32,
 }
 
 impl Tuple {
