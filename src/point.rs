@@ -1,3 +1,5 @@
+use std::ops::Add;
+
 const FLOAT_MARGIN: f32 = 0.0000001;
 
 fn float_eq(a: f32, b: f32) -> bool {
@@ -43,6 +45,19 @@ impl Tuple {
             y: y,
             z: z,
             w: 0.0,
+        }
+    }
+}
+
+impl Add for Tuple {
+    type Output = Tuple;
+
+    fn add(self, other: Tuple) -> Tuple {
+        Tuple {
+            x: self.x + other.x,
+            y: self.y + other.y,
+            z: self.z + other.z,
+            w: 1.0,
         }
     }
 }
@@ -107,5 +122,15 @@ mod tests {
         };
 
         assert_eq!(v.is_equal(t), true);
+    }
+
+    #[test]
+    fn adding_two_tuples() {
+        let a1 = Tuple::point(3., -2., 5.);
+        let a2 = Tuple::vector(-2., 3., 1.);
+
+        let result = Tuple::point(1., 1., 6.);
+
+        assert_eq!((a1 + a2).is_equal(result), true);
     }
 }
