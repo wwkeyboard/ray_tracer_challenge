@@ -1,4 +1,5 @@
 use std::ops::Add;
+use std::ops::Mul;
 use std::ops::Sub;
 
 const FLOAT_MARGIN: f32 = 0.000001;
@@ -40,6 +41,30 @@ impl Sub for Color {
             red: self.red - other.red,
             green: self.green - other.green,
             blue: self.blue - other.blue,
+        }
+    }
+}
+
+impl Mul<f32> for Color {
+    type Output = Color;
+
+    fn mul(self, other: f32) -> Color {
+        Color {
+            red: self.red * other,
+            green: self.green * other,
+            blue: self.blue * other,
+        }
+    }
+}
+
+impl Mul for Color {
+    type Output = Color;
+
+    fn mul(self, other: Color) -> Color {
+        Color {
+            red: self.red * other.red,
+            green: self.green * other.green,
+            blue: self.blue * other.blue,
         }
     }
 }
@@ -87,5 +112,23 @@ mod tests {
         let result = Color::new(0.2, 0.5, 0.5);
 
         assert_eq!(c1 - c2, result);
+    }
+
+    #[test]
+    fn multiple_color_by_scalar() {
+        let c1 = Color::new(0.2, 0.3, 0.4);
+        let result = Color::new(0.4, 0.6, 0.8);
+
+        assert_eq!(c1 * 2., result);
+    }
+
+    #[test]
+    fn multiply_color_by_color() {
+        let c1 = Color::new(1., 0.2, 0.4);
+        let c2 = Color::new(0.9, 1., 0.1);
+
+        let result = Color::new(0.9, 0.2, 0.04);
+
+        assert_eq!(c1 * c2, result);
     }
 }
