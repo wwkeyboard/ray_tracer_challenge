@@ -1,8 +1,11 @@
+extern crate num;
+use std::f32;
 use std::ops::Add;
 use std::ops::Mul;
 use std::ops::Sub;
 
 const FLOAT_MARGIN: f32 = 0.000001;
+const PPM_COLOR_SIZE: f32 = 255.;
 
 #[derive(Debug, Copy, Clone)]
 pub struct Color {
@@ -18,6 +21,19 @@ impl Color {
             green: g,
             blue: b,
         }
+    }
+
+    pub fn to_ppm(&self) -> String {
+        let r = (self.red * PPM_COLOR_SIZE).round();
+        let g = (self.green * PPM_COLOR_SIZE).round();
+        let b = (self.blue * PPM_COLOR_SIZE).round();
+
+        format!(
+            "{} {} {}",
+            num::clamp(r, 0., PPM_COLOR_SIZE),
+            num::clamp(g, 0., PPM_COLOR_SIZE),
+            num::clamp(b, 0., PPM_COLOR_SIZE)
+        )
     }
 }
 
@@ -130,5 +146,12 @@ mod tests {
         let result = Color::new(0.9, 0.2, 0.04);
 
         assert_eq!(c1 * c2, result);
+    }
+
+    #[test]
+    fn to_ppm() {
+        let c1 = Color::new(0.5, -1., 1.5);
+
+        assert_eq!(c1.to_ppm(), "128 0 255");
     }
 }
