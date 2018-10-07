@@ -32,13 +32,6 @@ impl Tuple {
         self.w == 1.0
     }
 
-    pub fn is_equal(&self, t: Tuple) -> bool {
-        float_eq(self.x, t.x)
-            && float_eq(self.y, t.y)
-            && float_eq(self.z, t.z)
-            && float_eq(self.w, t.w)
-    }
-
     pub fn point(x: f32, y: f32, z: f32) -> Tuple {
         Tuple {
             x: x,
@@ -86,6 +79,15 @@ impl Tuple {
         let z = self.x * other.y - self.y * other.x;
 
         Tuple::vector(x, y, z)
+    }
+}
+
+impl PartialEq for Tuple {
+    fn eq(&self, other: &Tuple) -> bool {
+        float_eq(self.x, other.x)
+            && float_eq(self.y, other.y)
+            && float_eq(self.z, other.z)
+            && float_eq(self.w, other.w)
     }
 }
 
@@ -187,7 +189,7 @@ mod tests {
             w: 1.0,
         };
 
-        assert_eq!(p.is_equal(t), true);
+        assert_eq!(p, t);
     }
 
     #[test]
@@ -200,7 +202,7 @@ mod tests {
             w: 0.0,
         };
 
-        assert_eq!(v.is_equal(t), true);
+        assert_eq!(v, t);
     }
 
     #[test]
@@ -210,7 +212,7 @@ mod tests {
 
         let result = Tuple::point(1., 1., 6.);
 
-        assert_eq!((a1 + a2).is_equal(result), true);
+        assert_eq!(a1 + a2, result);
     }
 
     #[test]
@@ -220,7 +222,7 @@ mod tests {
 
         let result = Tuple::vector(1., 1., 6.);
 
-        assert_eq!((a1 + a2).is_equal(result), true);
+        assert_eq!(a1 + a2, result);
     }
 
     #[test]
@@ -230,7 +232,7 @@ mod tests {
 
         let result = Tuple::vector(-2., -4., -6.);
 
-        assert_eq!((a1 - a2).is_equal(result), true);
+        assert_eq!(a1 - a2, result);
     }
 
     #[test]
@@ -240,7 +242,7 @@ mod tests {
 
         let result = Tuple::point(-2., -4., -6.);
 
-        assert_eq!((a1 - a2).is_equal(result), true);
+        assert_eq!(a1 - a2, result);
     }
 
     #[test]
@@ -250,7 +252,7 @@ mod tests {
 
         let result = Tuple::vector(-2., -4., -6.);
 
-        assert_eq!((a1 - a2).is_equal(result), true);
+        assert_eq!(a1 - a2, result);
     }
 
     #[test]
@@ -260,7 +262,7 @@ mod tests {
 
         let result = Tuple::vector(-1., 2., -3.);
 
-        assert_eq!((zero - a1).is_equal(result), true);
+        assert_eq!(zero - a1, result);
     }
 
     #[test]
@@ -269,7 +271,7 @@ mod tests {
 
         let result = Tuple::vector(-1., 2., -3.);
 
-        assert_eq!(a1.negate().is_equal(result), true);
+        assert_eq!(a1.negate(), result);
     }
 
     #[test]
@@ -278,7 +280,7 @@ mod tests {
 
         let result = Tuple::vector(3.5, -7., 10.5);
 
-        assert_eq!((a1 * 3.5).is_equal(result), true);
+        assert_eq!(a1 * 3.5, result);
     }
 
     #[test]
@@ -287,7 +289,7 @@ mod tests {
 
         let result = Tuple::vector(0.5, -1., 1.5);
 
-        assert_eq!((a1 / 2.).is_equal(result), true);
+        assert_eq!(a1 / 2., result);
     }
 
     #[test]
@@ -311,7 +313,7 @@ mod tests {
 
         let result = Tuple::vector(1., 0., 0.);
 
-        assert_eq!(a1.normalize().is_equal(result), true);
+        assert_eq!(a1.normalize(), result);
 
         let a2 = Tuple::vector(1., 2., 3.);
         assert_eq!(float_eq(a2.normalize().magnitude(), 1.), true);
@@ -331,6 +333,6 @@ mod tests {
         let a2 = Tuple::vector(2., 3., 4.);
 
         let result1 = Tuple::vector(-1., 2., -1.);
-        assert_eq!(a1.cross(a2).is_equal(result1), true);
+        assert_eq!(a1.cross(a2), result1);
     }
 }
