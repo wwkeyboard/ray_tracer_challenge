@@ -38,10 +38,18 @@ impl Canvas {
         println!("xes: {}", &self.pixels.len());
         println!("yes: {}", &self.pixels[0].len());
         for y in &self.pixels {
-            let mut last = 0;
+            let mut count = 0;
             for pixel in y {
+                // lines can't be longer than 70 chars, push a newline
+                // every 6 pixels to prevent this
+                if count == 6 {
+                    ppm.pop();
+                    ppm.push('\n');
+                    count = 0;
+                }
                 ppm.push_str(&pixel.to_ppm());
                 ppm.push(' ');
+                count = count + 1;
             }
             ppm.pop(); // janky but remove the trailing whitespace
             ppm.push('\n');
