@@ -1,4 +1,8 @@
 use color;
+use std::error::Error;
+use std::fs::File;
+use std::io::prelude::*;
+use std::path::Path;
 
 #[derive(Debug)]
 pub struct Canvas {
@@ -9,7 +13,7 @@ pub struct Canvas {
 
 // internally the pixels are stored row-major because of ppm weirdness
 impl Canvas {
-    fn new(width: usize, height: usize) -> Canvas {
+    pub fn new(width: usize, height: usize) -> Canvas {
         Canvas {
             height: height,
             width: width,
@@ -19,9 +23,21 @@ impl Canvas {
 
     // This will panic if x and y are not on the canvas, that means
     // there's been a big mistake
-    fn write_pixel(&mut self, x: usize, y: usize, color: color::Color) {
+    pub fn write_pixel(&mut self, x: usize, y: usize, color: color::Color) {
         // pixels is row-major
         self.pixels[y][x] = color;
+    }
+
+    // safe_write_pixel ignores writes outside of the canvas, at the
+    // cost of extra computation to do that calculation
+    pub fn safe_write_pixel(&mut self, x: usize, y: usize, color: color::Color) {
+        if x >= self.width {
+            return;
+        }
+        if y >= self.height {
+            return;
+        }
+        self.write_pixel(x, y, color)
     }
 
     // This will panic if x and y are not on the canvas
@@ -56,6 +72,19 @@ impl Canvas {
         }
 
         ppm
+    }
+
+    pub fn save_ppm(&self, filename: &Path) {
+        let display = filename.display();
+        let mut file = match File::create(&filename) {
+            Err(why) => panic!("couldn't create {}: {}", display, why.description()),
+            Ok(file) => file,
+        };
+
+        match file.write_all(self.to_ppm().as_bytes()) {
+            Err(why) => panic!("couldn't write to {}: {}", display, why.description()),
+            Ok(_) => println!("successfully wrote {}", display),
+        }
     }
 }
 
@@ -112,5 +141,13 @@ mod tests {
         assert_eq!(lines.next(), Some("255 0 0 0 0 0 0 0 0 0 0 0 0 0 0"));
         assert_eq!(lines.next(), Some("0 0 0 0 0 0 0 128 0 0 0 0 0 0 0"));
         assert_eq!(lines.next(), Some("0 0 0 0 0 0 0 0 0 0 0 0 0 0 255"));
+    }
+
+    #[test]
+    fn safe_write_pixel() {
+        let mut c = Canvas::new(5, 3);
+        c.safe_write_pixel(0, 0, color::Color::new(1., 1., 1.));
+        c.safe_write_pixel(100, 100, color::Color::new(1., 1., 1.));
+        c.safe_write_pixel(5, 3, color::Color::new(1., 1., 1.));
     }
 }
