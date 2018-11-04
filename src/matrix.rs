@@ -23,6 +23,28 @@ impl Matrix {
     pub fn get(&self, x: usize, y: usize) -> f32 {
         self.m[x][y]
     }
+
+    pub fn dimensions(&self) -> (usize, usize) {
+        (self.m.len(), self.m[0].len())
+    }
+}
+
+impl PartialEq for Matrix {
+    fn eq(&self, other: &Matrix) -> bool {
+        if self.dimensions() != other.dimensions() {
+            return false
+        }
+
+        for x in 0..self.m.len() {
+            for y in 0..self.m[0].len() {
+                if self.get(x,y) != other.get(x,y) {
+                    return false
+                }
+            }
+        }
+
+        return true
+    }
 }
 
 #[cfg(test)]
@@ -68,4 +90,31 @@ mod tests {
         assert_eq!(m.get(1,1), 6.5);
     }
 
+    #[test]
+    fn compare_matrices(){
+        let m1 = Matrix::new(vec![
+            vec![1., 2.],
+            vec![3., 4.],
+        ]);
+
+        let m2 = Matrix::new(vec![
+            vec![1., 2.],
+            vec![3., 4.],
+        ]);
+
+        let m3 = Matrix::new(vec![
+            vec![1., 2.],
+            vec![5., 6.],
+        ]);
+
+        let m4 = Matrix::new(vec![
+            vec![1., 2., 3.],
+            vec![1., 2., 3.],
+            vec![1., 2., 3.],
+        ]);
+
+        assert_eq!(m1, m2);
+        assert_ne!(m1, m3);
+        assert_ne!(m1, m4);
+    }
 }
