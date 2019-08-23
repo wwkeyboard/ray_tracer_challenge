@@ -3,7 +3,6 @@ mod color;
 mod matrix;
 mod point;
 use canvas::Canvas;
-use color::Color;
 use point::Tuple;
 
 use std::path::Path;
