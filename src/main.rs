@@ -4,13 +4,20 @@ mod matrix;
 mod point;
 use canvas::Canvas;
 use point::Tuple;
+use std::env;
 
 use std::path::Path;
 
 fn main() {
+    let args: Vec<String> = env::args().collect();
+    println!("{:?}", args);
+
+    let grav: f32 = args[1].parse().unwrap();
+    let wind: f32 = args[2].parse().unwrap();
+
     let world = World {
-        gravity: Tuple::vector(0., 0., -0.1),
-        wind: Tuple::vector(0., -0.04, 0.),
+        gravity: Tuple::vector(0., 0., -1.0 * grav),
+        wind: Tuple::vector(0., -1.0 * wind, 0.),
     };
 
     let mut p = Projectile {
