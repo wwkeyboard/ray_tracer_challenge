@@ -109,7 +109,7 @@ mod tests {
 
         let m4 = Matrix::new(vec![
             vec![1., 2., 3.],
-            vec![1., 2., 3.],
+            vec![3., 4., 3.],
             vec![1., 2., 3.],
         ]);
 
